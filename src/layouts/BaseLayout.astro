@@ -1,0 +1,85 @@
+---
+import '../styles/global.css';
+import TopBar from '../components/TopBar.astro';
+import Sidebar from '../components/Sidebar.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  ogType?: 'website' | 'article';
+  activeCategorySlug?: string;
+}
+
+const {
+  title,
+  description = 'Documentando mi viaje por los fundamentos de la ingeniería de software.',
+  ogType = 'website',
+  activeCategorySlug,
+} = Astro.props;
+
+const fullTitle = title === 'Software Engineering Fundamentals'
+  ? title
+  : `${title} — Software Engineering Fundamentals`;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+---
+<!doctype html>
+<html lang="es" class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="author" content="Gabriel" />
+    <meta name="description" content={description} />
+
+    <link rel="canonical" href={canonicalURL} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+
+    <title>{fullTitle}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="font-body-reading antialiased min-h-screen">
+    <TopBar />
+    <Sidebar activeSlug={activeCategorySlug} />
+
+    <main class="relative md:ml-64 pt-24 pb-20 min-h-screen">
+      <div class="max-w-[920px] mx-auto px-6">
+        <slot />
+      </div>
+    </main>
+
+    <footer
+      class="md:ml-64 py-12 border-t border-[#222222] opacity-40 grayscale"
+    >
+      <div
+        class="max-w-[720px] mx-auto px-6 flex justify-between items-center"
+      >
+        <p class="font-mono text-[10px] uppercase tracking-widest">
+          GABRIEL_ENGINEERING_v0.1.0
+        </p>
+        <p class="font-mono text-[10px] uppercase tracking-widest">
+          STATIC · ASTRO 5
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
