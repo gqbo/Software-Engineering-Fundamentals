@@ -62,7 +62,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
     <TopBar />
     <Sidebar activeSlug={activeCategorySlug} />
 
-    <main class="relative md:ml-sidebar pt-page-top pb-page-bottom min-h-screen">
+    <main class="md:ml-sidebar pt-page-top pb-page-bottom min-h-screen">
       <Container>
         <slot />
       </Container>

@@ -4,11 +4,12 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
 import Card from '../../components/Card.astro';
 import DifficultyBadge from '../../components/DifficultyBadge.astro';
+import { moduleCategory, moduleSlug } from '../../lib/content';
 
 export async function getStaticPaths() {
   const modules = await getCollection('modules');
   return modules.map(moduleEntry => ({
-    params: { slug: moduleEntry.data.slug },
+    params: { slug: moduleSlug(moduleEntry) },
     props: { moduleEntry }
   }));
 }
@@ -17,32 +18,33 @@ interface Props {
   moduleEntry: CollectionEntry<'modules'>;
 }
 
-const { slug } = Astro.params;
 const { moduleEntry } = Astro.props;
+const slug = moduleSlug(moduleEntry);
+const categorySlug = moduleCategory(moduleEntry);
 
 const allCategories = await getCollection('categories');
-const category = allCategories.find(c => c.data.slug === moduleEntry.data.category);
+const category = allCategories.find(c => c.id === categorySlug);
 
 if (!category) {
-  throw new Error(`Module "${moduleEntry.data.slug}" references unknown category "${moduleEntry.data.category}"`);
+  throw new Error(`Module "${moduleEntry.id}" lives in folder "${categorySlug}" but no matching category file exists at categories/${categorySlug}.md`);
 }
 
 const allModules = await getCollection('modules');
 const categoryModules = allModules
-  .filter(m => m.data.category === moduleEntry.data.category)
+  .filter(m => moduleCategory(m) === categorySlug)
   .sort((a, b) => a.data.order - b.data.order);
 
-const moduleIndex = categoryModules.findIndex(m => m.data.slug === slug);
+const moduleIndex = categoryModules.findIndex(m => moduleSlug(m) === slug);
 const { Content } = await render(moduleEntry);
 ---
 
-<BaseLayout title={moduleEntry.data.title} activeCategorySlug={category.data.slug}>
+<BaseLayout title={moduleEntry.data.title} activeCategorySlug={category.id}>
   <Breadcrumb items={[moduleEntry.data.title, category.data.name, 'Módulo']} />
 
   <article class="mb-16">
     <section class="mb-8">
       <div class="mb-4">
-        <a href={`/category/${category.data.slug}`} class="text-ui-label text-primary hover:underline font-mono">
+        <a href={`/category/${category.id}`} class="text-ui-label text-primary hover:underline font-mono">
           ← {category.data.name}
         </a>
       </div>
@@ -86,7 +88,7 @@ const { Content } = await render(moduleEntry);
         <>
           <p class="text-ui-micro text-muted-faint mb-2">Anterior en {category.data.name}</p>
           <a
-            href={`/module/${categoryModules[moduleIndex - 1].data.slug}`}
+            href={`/module/${moduleSlug(categoryModules[moduleIndex - 1])}`}
             class="font-mono text-ui-label text-primary hover:underline inline-block"
           >
             ← {categoryModules[moduleIndex - 1].data.title}
@@ -100,7 +102,7 @@ const { Content } = await render(moduleEntry);
         <>
           <p class="text-ui-micro text-muted-faint mb-2">Siguiente en {category.data.name}</p>
           <a
-            href={`/module/${categoryModules[moduleIndex + 1].data.slug}`}
+            href={`/module/${moduleSlug(categoryModules[moduleIndex + 1])}`}
             class="font-mono text-ui-label text-primary hover:underline inline-block"
           >
             {categoryModules[moduleIndex + 1].data.title} →

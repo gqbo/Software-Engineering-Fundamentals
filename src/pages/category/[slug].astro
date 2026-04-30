@@ -4,11 +4,12 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
 import Card from '../../components/Card.astro';
 import DifficultyBadge from '../../components/DifficultyBadge.astro';
+import { moduleCategory, moduleSlug } from '../../lib/content';
 
 export async function getStaticPaths() {
   const categories = await getCollection('categories');
   return categories.map(category => ({
-    params: { slug: category.data.slug },
+    params: { slug: category.id },
     props: { category }
   }));
 }
@@ -22,16 +23,16 @@ const { category } = Astro.props;
 
 const allModules = await getCollection('modules');
 const modules = allModules
-  .filter(m => m.data.category === slug)
+  .filter(m => moduleCategory(m) === slug)
   .sort((a, b) => a.data.order - b.data.order);
 
 const allCategories = await getCollection('categories');
 const categoriesSorted = allCategories.sort((a, b) => a.data.order - b.data.order);
 
-const categoryIndex = categoriesSorted.findIndex(c => c.data.slug === slug);
+const categoryIndex = categoriesSorted.findIndex(c => c.id === slug);
 ---
 
-<BaseLayout title={category.data.name} activeCategorySlug={category.data.slug}>
+<BaseLayout title={category.data.name} activeCategorySlug={category.id}>
   <Breadcrumb items={[category.data.name, 'Categoría']} />
 
   <section class="mb-16">
@@ -48,7 +49,7 @@ const categoryIndex = categoriesSorted.findIndex(c => c.data.slug === slug);
         <h1 class="font-mono text-h1 text-primary mb-2">
           {category.data.name}
         </h1>
-        <p class="text-body text-muted max-w-2xl">
+        <p class="text-body text-muted text-justify">
           {category.data.description}
         </p>
         <p class="text-ui-label text-muted-faint mt-4">
@@ -62,7 +63,7 @@ const categoryIndex = categoriesSorted.findIndex(c => c.data.slug === slug);
     <h2 class="font-mono text-h2 text-primary mb-6">Módulos</h2>
     <div class="space-y-3">
       {modules.map(moduleEntry => (
-        <a href={`/module/${moduleEntry.data.slug}`} class="block">
+        <a href={`/module/${moduleSlug(moduleEntry)}`} class="block">
           <Card variant="default">
             <div class="flex items-start gap-4">
               <div class="flex-1">
@@ -90,7 +91,7 @@ const categoryIndex = categoriesSorted.findIndex(c => c.data.slug === slug);
     <div class="border-t border-border pt-8 mb-8">
       <p class="text-ui-micro text-muted-faint mb-2">Anterior</p>
       <a
-        href={`/category/${categoriesSorted[categoryIndex - 1].data.slug}`}
+        href={`/category/${categoriesSorted[categoryIndex - 1].id}`}
         class="font-mono text-ui-label text-primary hover:underline"
       >
         ← {categoriesSorted[categoryIndex - 1].data.name}
@@ -102,7 +103,7 @@ const categoryIndex = categoriesSorted.findIndex(c => c.data.slug === slug);
     <div class="border-t border-border pt-8">
       <p class="text-ui-micro text-muted-faint mb-2">Siguiente</p>
       <a
-        href={`/category/${categoriesSorted[categoryIndex + 1].data.slug}`}
+        href={`/category/${categoriesSorted[categoryIndex + 1].id}`}
         class="font-mono text-ui-label text-primary hover:underline"
       >
         {categoriesSorted[categoryIndex + 1].data.name} →

@@ -3,16 +3,17 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumb from '../components/Breadcrumb.astro';
 import Card from '../components/Card.astro';
+import { moduleCategory } from '../lib/content';
 
 const categories = await getCollection('categories');
 const modules = await getCollection('modules');
 const categoriesSorted = categories.sort((a, b) => a.data.order - b.data.order);
 
-const categoryModuleCounts = new Map();
-categoriesSorted.forEach(cat => {
-  const count = modules.filter(m => m.data.category === cat.data.slug).length;
-  categoryModuleCounts.set(cat.data.slug, count);
-});
+const moduleCountByCategory = new Map<string, number>();
+for (const m of modules) {
+  const cat = moduleCategory(m);
+  moduleCountByCategory.set(cat, (moduleCountByCategory.get(cat) ?? 0) + 1);
+}
 ---
 <BaseLayout title="Software Engineering Fundamentals">
   <Breadcrumb items={['Inicio']} />
@@ -21,7 +22,7 @@ categoriesSorted.forEach(cat => {
     <h1 class="font-mono text-h1 text-primary mb-4">
       Fundamentos de Ingeniería de Software
     </h1>
-    <p class="text-body text-muted max-w-2xl mb-4">
+    <p class="text-body text-muted text-justify mb-4">
       Mi portafolio de aprendizaje: repasando fundamentos esenciales de ingeniería de software enfocado en backend y desarrollo con IA. Cada módulo incluye una sección "Mi explicación" donde documento mi comprensión del tema.
     </p>
     <p class="text-ui-label text-muted-faint">
@@ -32,36 +33,39 @@ categoriesSorted.forEach(cat => {
   <section class="mb-16">
     <h2 class="font-mono text-h2 text-primary mb-6">Categorías</h2>
     <div class="grid gap-4">
-      {categoriesSorted.map(category => (
-        <a href={`/category/${category.data.slug}`} class="block">
-          <Card variant="default">
-            <div class="flex items-start gap-4">
-              <div
-                class="cat-icon-box w-12 h-12 flex items-center justify-center text-xl flex-shrink-0"
-                style={`--cat-color: ${category.data.color}`}
-              >
-                <span class="material-symbols-outlined">
-                  {category.data.icon}
-                </span>
+      {categoriesSorted.map(category => {
+        const count = moduleCountByCategory.get(category.id) ?? 0;
+        return (
+          <a href={`/category/${category.id}`} class="block">
+            <Card variant="default">
+              <div class="flex items-start gap-4">
+                <div
+                  class="cat-icon-box w-12 h-12 flex items-center justify-center text-xl flex-shrink-0"
+                  style={`--cat-color: ${category.data.color}`}
+                >
+                  <span class="material-symbols-outlined">
+                    {category.data.icon}
+                  </span>
+                </div>
+                <div class="flex-1">
+                  <h3 class="font-mono text-ui-label text-primary mb-1 hover:underline">
+                    {category.data.name}
+                  </h3>
+                  <p class="text-body text-muted text-sm mb-2">
+                    {category.data.description}
+                  </p>
+                  <p class="text-ui-micro text-muted-faint">
+                    {count} {count === 1 ? 'módulo' : 'módulos'}
+                  </p>
+                </div>
+                <div class="text-muted-faint flex-shrink-0">
+                  <span class="material-symbols-outlined">arrow_forward</span>
+                </div>
               </div>
-              <div class="flex-1">
-                <h3 class="font-mono text-ui-label text-primary mb-1 hover:underline">
-                  {category.data.name}
-                </h3>
-                <p class="text-body text-muted text-sm mb-2">
-                  {category.data.description}
-                </p>
-                <p class="text-ui-micro text-muted-faint">
-                  {categoryModuleCounts.get(category.data.slug)} {categoryModuleCounts.get(category.data.slug) === 1 ? 'módulo' : 'módulos'}
-                </p>
-              </div>
-              <div class="text-muted-faint flex-shrink-0">
-                <span class="material-symbols-outlined">arrow_forward</span>
-              </div>
-            </div>
-          </Card>
-        </a>
-      ))}
+            </Card>
+          </a>
+        );
+      })}
     </div>
   </section>
 </BaseLayout>

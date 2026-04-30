@@ -8,8 +8,7 @@ interface Props {
 const { activeSlug } = Astro.props;
 
 const categories = (await getCollection('categories'))
-  .map((entry) => entry.data)
-  .sort((a, b) => a.order - b.order);
+  .sort((a, b) => a.data.order - b.data.order);
 ---
 <nav
   class="hidden md:flex flex-col w-sidebar fixed left-0 top-topbar bottom-0 py-8 z-sidebar bg-bg border-r border-border"
@@ -28,11 +27,11 @@ const categories = (await getCollection('categories'))
   ) : (
     <ul class="flex flex-col gap-2">
       {categories.map((cat) => {
-        const isActive = activeSlug === cat.slug;
+        const isActive = activeSlug === cat.id;
         return (
           <li>
             <a
-              href={`/category/${cat.slug}`}
+              href={`/category/${cat.id}`}
               aria-current={isActive ? 'page' : undefined}
               class:list={[
                 'flex items-center gap-4 py-3 pl-4 font-mono text-ui-label transition-colors duration-150 ease-in-out',
@@ -41,8 +40,8 @@ const categories = (await getCollection('categories'))
                   : 'text-muted hover:text-on-surface hover:bg-surface',
               ]}
             >
-              <span class="material-symbols-outlined">{cat.icon}</span>
-              <span>{cat.name}</span>
+              <span class="material-symbols-outlined">{cat.data.icon}</span>
+              <span>{cat.data.name}</span>
             </a>
           </li>
         );
