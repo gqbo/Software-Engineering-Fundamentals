@@ -32,7 +32,7 @@ const modules = defineCollection({
     why: z.string(),
     order: z.number(),
     topics: z.array(z.string()).min(1),
-    exercise: z.string(),
+    exercise: z.string().default(''),
     solution_repo: z.string().url().or(z.literal('')).default(''),
     resources: z.array(resource).default([]),
   }),
