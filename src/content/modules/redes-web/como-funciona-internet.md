@@ -1,7 +1,5 @@
 ---
 title: "Cómo funciona internet: IP, TCP/UDP, modelo OSI"
-slug: "como-funciona-internet"
-category: "redes-web"
 difficulty: "basico"
 order: 1
 description: "Modelo OSI, capas de red, dirección IP, TCP vs UDP, handshake de TCP, routing."

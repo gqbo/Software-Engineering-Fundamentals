@@ -1,7 +1,5 @@
 ---
 title: "DNS y dominios"
-slug: "dns-dominios"
-category: "redes-web"
 difficulty: "basico"
 order: 2
 description: "Sistema de nombres de dominio, resolución DNS, registros (A, AAAA, CNAME, MX, TXT), TTL, propagación."

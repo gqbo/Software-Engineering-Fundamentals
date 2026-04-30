@@ -1,7 +1,5 @@
 ---
 title: "Clean code: nombres, funciones, comentarios, abstracción"
-slug: "clean-code"
-category: "fundamentos"
 difficulty: "basico"
 order: 4
 description: "Prácticas para código legible, mantenible, autoexplicativo. Naming, tamaño de funciones, cuándo comentar."

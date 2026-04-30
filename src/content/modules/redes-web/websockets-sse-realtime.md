@@ -1,7 +1,5 @@
 ---
 title: "WebSockets, SSE y comunicación en tiempo real"
-slug: "websockets-sse-realtime"
-category: "redes-web"
 difficulty: "intermedio"
 order: 5
 description: "WebSockets (bidireccional), Server-Sent Events (SSE, unidireccional), long polling, cuándo usar cada uno."

@@ -1,7 +1,5 @@
 ---
 title: "Abstracción y modularización"
-slug: "abstraccion-modularizacion"
-category: "fundamentos"
 difficulty: "intermedio"
 order: 5
 description: "Cómo abstraer complejidad, crear módulos cohesivos, separación de concerns, interfaces bien definidas."

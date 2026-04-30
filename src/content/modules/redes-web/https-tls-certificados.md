@@ -1,7 +1,5 @@
 ---
 title: "HTTPS, TLS y certificados"
-slug: "https-tls-certificados"
-category: "redes-web"
 difficulty: "intermedio"
 order: 4
 description: "Diferencia HTTP vs HTTPS, handshake TLS, certificados digitales (X.509), cadena de confianza, autenticación de servidor."

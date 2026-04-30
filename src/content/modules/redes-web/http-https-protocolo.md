@@ -1,7 +1,5 @@
 ---
 title: "HTTP/HTTPS: request, response, status codes, headers"
-slug: "http-https-protocolo"
-category: "redes-web"
 difficulty: "basico"
 order: 3
 description: "Protocolo HTTP, métodos (GET, POST, PUT, DELETE, PATCH), status codes, headers estándar, versiones (1.1, 2, 3)."

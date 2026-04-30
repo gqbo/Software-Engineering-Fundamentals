@@ -1,7 +1,5 @@
 ---
 title: "CORS y same-origin policy"
-slug: "cors-same-origin"
-category: "redes-web"
 difficulty: "basico"
 order: 6
 description: "Same-Origin Policy, CORS, preflight requests, credenciales entre orígenes, debugging de CORS."

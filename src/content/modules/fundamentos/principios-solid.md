@@ -1,7 +1,5 @@
 ---
 title: "Principios SOLID"
-slug: "principios-solid"
-category: "fundamentos"
 difficulty: "intermedio"
 order: 2
 description: "Single Responsibility, Open-Closed, Liskov Substitution, Interface Segregation, Dependency Inversion."

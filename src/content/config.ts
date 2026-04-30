@@ -1,11 +1,18 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
+/**
+ * Content schemas.
+ *
+ * Slug and category are NOT in the frontmatter — they are derived from
+ * the file path (see src/lib/content.ts):
+ *   - categories/<slug>.md
+ *   - modules/<category-slug>/<module-slug>.md
+ */
 const categories = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/categories' }),
   schema: z.object({
     name: z.string(),
-    slug: z.string(),
     description: z.string(),
     icon: z.string(),
     order: z.number(),
@@ -25,8 +32,6 @@ const modules = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/modules' }),
   schema: z.object({
     title: z.string(),
-    slug: z.string(),
-    category: z.string(),
     difficulty,
     description: z.string(),
     why: z.string(),

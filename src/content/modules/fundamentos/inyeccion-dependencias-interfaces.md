@@ -1,7 +1,5 @@
 ---
 title: "Inyección de dependencias e interfaces"
-slug: "inyeccion-dependencias-interfaces"
-category: "fundamentos"
 difficulty: "intermedio"
 order: 3
 description: "Desacoplamiento usando interfaces, tipos de inyección (constructor, property, method), testing con mocks."

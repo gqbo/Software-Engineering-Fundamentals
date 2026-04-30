@@ -1,7 +1,5 @@
 ---
 title: "Programación orientada a objetos: clases, encapsulación, herencia, polimorfismo"
-slug: "oop-principios"
-category: "fundamentos"
 difficulty: "basico"
 order: 1
 description: "Pillares de OOP: clases, objetos, encapsulación, herencia, polimorfismo, composición."
