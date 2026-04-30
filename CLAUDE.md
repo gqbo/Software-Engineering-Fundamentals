@@ -78,6 +78,52 @@ Sistema:      #a3ffd4
 - All content queries use `getCollection()` and `getEntry()` from Astro
 - UI labels and code in English, content text in Spanish
 
+## Tailwind 4 Styling Rules — MANDATORY
+
+**How it works:** `src/styles/global.css` defines tokens with `@theme { --color-X: ...; --text-X: ...; }`. Tailwind 4 **automatically generates utility classes** from these tokens (`text-h1`, `bg-surface`, `w-sidebar`, `ml-sidebar`, `z-topbar`, etc.). Never hardcode hex/px/rem in components.
+
+### 5 Rules (non-negotiable)
+
+1. **NEVER hardcode `#hex`, `rem`, or `px` in components** — Always use tokens
+   ```astro
+   ❌ <div class="bg-[#0d0d0d] w-[256px] text-[2.5rem]">
+   ✅ <div class="bg-bg w-sidebar text-h1">
+   ```
+
+2. **NEVER use Tailwind defaults** (`text-neutral-100/200/400/500`) — Use semantic tokens
+   ```astro
+   ❌ <p class="text-neutral-400">Muted text</p>
+   ✅ <p class="text-muted">Muted text</p>
+   ```
+   Tokens: `text-on-surface`, `text-muted`, `text-muted-strong`, `text-muted-faint`
+
+3. **If a pattern repeats 2+ times, make it a primitive component**
+   - `Container.astro` — centered max-width wrapper (width=content|prose)
+   - `Card.astro` — bordered section (variant=default|sunken)
+   - `Breadcrumb.astro` — navigation trail
+   ```astro
+   ❌ <div class="p-8 border border-border bg-surface">
+        <p>Content</p>
+      </div>
+   ✅ <Card>
+        <p>Content</p>
+      </Card>
+   ```
+
+4. **z-index always semantic** — Never use numeric values
+   ```astro
+   ❌ <div class="z-50">
+   ✅ <div class="z-topbar">
+   ```
+   Available: `z-base`, `z-sticky`, `z-sidebar`, `z-topbar`, `z-modal`, `z-toast`
+
+5. **Typography always via semantic tokens** — Line-height and weight travel with the token
+   ```astro
+   ❌ <h1 class="text-[2.5rem] leading-[1.2] tracking-[-0.02em] font-bold">
+   ✅ <h1 class="text-h1">
+   ```
+   Available: `text-h1`, `text-h2`, `text-h3`, `text-ui-label`, `text-ui-micro`, `text-body`
+
 ## Reference Files
 
 - `SPEC.md` — Full project specification (pages, sections, schema, acceptance criteria)
