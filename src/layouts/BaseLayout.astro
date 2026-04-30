@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import TopBar from '../components/TopBar.astro';
 import Sidebar from '../components/Sidebar.astro';
+import Container from '../components/Container.astro';
 
 interface Props {
   title: string;
@@ -24,7 +25,7 @@ const fullTitle = title === 'Software Engineering Fundamentals'
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 <!doctype html>
-<html lang="es" class="dark">
+<html lang="es">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -57,29 +58,27 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
     />
   </head>
 
-  <body class="font-body-reading antialiased min-h-screen">
+  <body class="min-h-screen">
     <TopBar />
     <Sidebar activeSlug={activeCategorySlug} />
 
-    <main class="relative md:ml-64 pt-24 pb-20 min-h-screen">
-      <div class="max-w-[920px] mx-auto px-6">
+    <main class="relative md:ml-sidebar pt-24 pb-20 min-h-screen">
+      <Container>
         <slot />
-      </div>
+      </Container>
     </main>
 
-    <footer
-      class="md:ml-64 py-12 border-t border-[#222222] opacity-40 grayscale"
-    >
-      <div
-        class="max-w-[720px] mx-auto px-6 flex justify-between items-center"
-      >
-        <p class="font-mono text-[10px] uppercase tracking-widest">
-          GABRIEL_ENGINEERING_v0.1.0
-        </p>
-        <p class="font-mono text-[10px] uppercase tracking-widest">
-          STATIC · ASTRO 5
-        </p>
-      </div>
+    <footer class="md:ml-sidebar py-12 border-t border-border opacity-40 grayscale">
+      <Container>
+        <div class="flex justify-between items-center">
+          <p class="font-mono text-ui-micro uppercase">
+            GABRIEL_ENGINEERING_v0.1.0
+          </p>
+          <p class="font-mono text-ui-micro uppercase">
+            STATIC · ASTRO 5
+          </p>
+        </div>
+      </Container>
     </footer>
   </body>
 </html>

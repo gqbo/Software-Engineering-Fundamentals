@@ -1,28 +1,40 @@
 @import "tailwindcss";
 
 /*
- * Terminal Editorial design tokens
- * Source: DESIGN.md (prose) + SPEC.md + reference/stitch-prototype.html
- * The Material 3 frontmatter in DESIGN.md is intentionally NOT used.
+ * Terminal Editorial — Design Tokens
+ *
+ * Source of truth for the entire design system.
+ * Tailwind 4 auto-generates utilities from these tokens:
+ *   --color-X        → bg-X, text-X, border-X, ring-X, divide-X, etc.
+ *   --font-X         → font-X
+ *   --text-X         → text-X (with associated line-height/tracking/weight)
+ *   --spacing-X      → p-X, m-X, gap-X, etc.
+ *   --container-X    → max-w-X
+ *   --radius-X       → rounded-X
+ *   --z-X            → z-X
+ *
+ * RULE: Never hardcode hex/px/rem in components. Always reference tokens.
  */
 @theme {
-  /* Surfaces — depth via tonal layers, not shadows */
+  /* ─── Surfaces — depth via tonal layers, not shadows ─── */
   --color-bg: #0d0d0d;
   --color-surface: #111111;
   --color-surface-hover: #161616;
   --color-surface-sunken: #0e0e0e;
 
-  /* Borders */
+  /* ─── Borders ─── */
   --color-border: #222222;
   --color-border-subtle: #444748;
 
-  /* Text */
+  /* ─── Text ─── */
   --color-primary: #ffffff;
   --color-on-surface: #e5e2e1;
   --color-on-surface-variant: #c4c7c8;
   --color-muted: #8e9192;
+  --color-muted-strong: #6b6e6f;
+  --color-muted-faint: #3a3d3e;
 
-  /* Category accents */
+  /* ─── Category accents ─── */
   --color-cat-fundamentos: #e0aaff;
   --color-cat-datos: #a3f7bf;
   --color-cat-backend: #ffa3a3;
@@ -31,16 +43,11 @@
   --color-cat-diseno: #d4a3ff;
   --color-cat-sistema: #a3ffd4;
 
-  /* Typography */
+  /* ─── Typography — font families ─── */
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 
-  --font-h1: "JetBrains Mono", ui-monospace, monospace;
-  --font-h2: "JetBrains Mono", ui-monospace, monospace;
-  --font-h3: "JetBrains Mono", ui-monospace, monospace;
-  --font-ui-label: "JetBrains Mono", ui-monospace, monospace;
-  --font-body-reading: "Inter", ui-sans-serif, system-ui, sans-serif;
-
+  /* ─── Typography — semantic scale (auto-generates text-h1, text-h2, etc.) ─── */
   --text-h1: 2.5rem;
   --text-h1--line-height: 1.2;
   --text-h1--letter-spacing: -0.02em;
@@ -58,15 +65,33 @@
   --text-ui-label--line-height: 1;
   --text-ui-label--font-weight: 500;
 
-  --text-body-reading: 1.125rem;
-  --text-body-reading--line-height: 1.8;
-  --text-body-reading--letter-spacing: 0.01em;
-  --text-body-reading--font-weight: 400;
+  --text-ui-micro: 0.625rem;
+  --text-ui-micro--line-height: 1;
+  --text-ui-micro--letter-spacing: 0.1em;
+  --text-ui-micro--font-weight: 500;
 
-  /* Layout */
-  --container-content: 720px;
+  --text-body: 1.125rem;
+  --text-body--line-height: 1.8;
+  --text-body--letter-spacing: 0.01em;
+  --text-body--font-weight: 400;
 
-  /* Sharp corners — design system mandates 0px radius */
+  /* ─── Layout — containers (auto-generates max-w-content, max-w-prose) ─── */
+  --container-content: 920px;
+  --container-prose: 720px;
+
+  /* ─── Layout — sidebar width (auto-generates w-sidebar, ml-sidebar) ─── */
+  --spacing-sidebar: 16rem; /* 256px = w-64 equivalent */
+  --spacing-topbar: 3.5rem; /* 56px = h-14 equivalent */
+
+  /* ─── z-index — semantic layering ─── */
+  --z-base: 0;
+  --z-sticky: 10;
+  --z-sidebar: 40;
+  --z-topbar: 50;
+  --z-modal: 60;
+  --z-toast: 70;
+
+  /* ─── Sharp corners — design system mandates 0px radius ─── */
   --radius-DEFAULT: 0;
   --radius-sm: 0;
   --radius-md: 0;
@@ -82,15 +107,14 @@
  * Sharp corners EVERYWHERE. No shadows. CSS-only transitions.
  */
 @layer base {
-  html {
+  html,
+  body {
     background-color: var(--color-bg);
     color: var(--color-on-surface);
   }
 
   body {
-    background-color: var(--color-bg);
-    color: var(--color-on-surface);
-    font-family: var(--font-body-reading);
+    font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }

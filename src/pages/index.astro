@@ -1,28 +1,24 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import Card from '../components/Card.astro';
 ---
-<BaseLayout title="Engineering Fundamentals">
-  <nav class="mb-8">
-    <p
-      class="font-mono text-neutral-500 uppercase tracking-widest text-[10px]"
-    >
-      Índice <span class="mx-2 text-[#222222]">&gt;</span> Inicio
-    </p>
-  </nav>
+<BaseLayout title="Software Engineering Fundamentals">
+  <Breadcrumb items={['Índice', 'Inicio']} />
 
   <section class="mb-16">
-    <h1 class="font-mono text-[2.5rem] font-bold leading-[1.2] tracking-[-0.02em] text-white mb-4">
+    <h1 class="font-mono text-h1 text-primary mb-4">
       Fundamentos de Ingeniería de Software
     </h1>
-    <p class="font-mono text-[1.25rem] leading-[1.4] font-semibold text-neutral-500">
+    <p class="font-mono text-h3 text-muted">
       Estructura inicializada · contenido pendiente
     </p>
   </section>
 
-  <section class="p-8 border border-[#222222] bg-[#0e0e0e]">
-    <p class="text-neutral-400 text-sm leading-relaxed">
+  <Card variant="sunken">
+    <p class="text-on-surface-variant text-ui-label leading-relaxed">
       Esto es un placeholder para verificar que el shell global funciona.
       El home real se construye en el próximo sprint.
     </p>
-  </section>
+  </Card>
 </BaseLayout>

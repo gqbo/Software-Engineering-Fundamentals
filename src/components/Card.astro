@@ -1,0 +1,20 @@
+---
+/**
+ * Card — Bordered container for content blocks.
+ *
+ * Variants:
+ *   - "default": surface background
+ *   - "sunken":  surface-sunken background (slightly darker than bg)
+ */
+interface Props {
+  variant?: 'default' | 'sunken';
+  class?: string;
+}
+
+const { variant = 'default', class: className = '' } = Astro.props;
+
+const surfaceClass = variant === 'sunken' ? 'bg-surface-sunken' : 'bg-surface';
+---
+<section class:list={['p-8 border border-border', surfaceClass, className]}>
+  <slot />
+</section>

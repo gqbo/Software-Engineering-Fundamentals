@@ -1,0 +1,20 @@
+---
+/**
+ * Container — Centered max-width wrapper.
+ *
+ * Variants:
+ *   - "content" (default, 920px): standard page content
+ *   - "prose":   (720px): long-form reading
+ */
+interface Props {
+  width?: 'content' | 'prose';
+  class?: string;
+}
+
+const { width = 'content', class: className = '' } = Astro.props;
+
+const widthClass = width === 'prose' ? 'max-w-prose' : 'max-w-content';
+---
+<div class:list={[widthClass, 'mx-auto px-6', className]}>
+  <slot />
+</div>

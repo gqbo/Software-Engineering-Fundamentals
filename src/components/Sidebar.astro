@@ -12,33 +12,35 @@ const categories = (await getCollection('categories'))
   .sort((a, b) => a.order - b.order);
 ---
 <nav
-  class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-full py-8 bg-[#0d0d0d] border-r border-[#222222] z-40"
+  class="hidden md:flex flex-col w-sidebar fixed left-0 top-0 h-full py-8 z-sidebar bg-bg border-r border-border"
   aria-label="Categories"
 >
   <div class="px-8 mb-10">
-    <h2 class="text-lg font-bold font-mono text-neutral-100 tracking-widest">
+    <h2 class="font-mono text-h3 text-primary tracking-widest">
       CATEGORÍAS
     </h2>
   </div>
 
   {categories.length === 0 ? (
-    <p class="px-8 font-mono text-xs text-neutral-600">
+    <p class="px-8 font-mono text-ui-micro text-muted-strong">
       Aún no hay categorías.
     </p>
   ) : (
     <ul class="flex flex-col gap-2">
       {categories.map((cat) => {
         const isActive = activeSlug === cat.slug;
-        const linkClasses = [
-          'flex items-center gap-4 py-3 pl-4 font-mono text-xs duration-150 ease-in-out',
-          isActive
-            ? 'text-neutral-200 bg-[#111111]'
-            : 'text-neutral-500 hover:text-neutral-200 hover:bg-[#111111]',
-        ].join(' ');
-
         return (
           <li>
-            <a href={`/category/${cat.slug}`} class={linkClasses}>
+            <a
+              href={`/category/${cat.slug}`}
+              aria-current={isActive ? 'page' : undefined}
+              class:list={[
+                'flex items-center gap-4 py-3 pl-4 font-mono text-ui-label transition-colors duration-150 ease-in-out',
+                isActive
+                  ? 'text-on-surface bg-surface'
+                  : 'text-muted hover:text-on-surface hover:bg-surface',
+              ]}
+            >
               <span class="material-symbols-outlined">{cat.icon}</span>
               <span>{cat.name}</span>
             </a>

@@ -1,0 +1,21 @@
+---
+/**
+ * Breadcrumb — Navigation trail with monospace separators.
+ * Items are rendered in order; the last item is typically the current page.
+ */
+interface Props {
+  items: string[];
+}
+
+const { items } = Astro.props;
+---
+<nav class="mb-8" aria-label="Breadcrumb">
+  <p class="font-mono text-muted uppercase tracking-widest text-ui-micro">
+    {items.map((item, i) => (
+      <>
+        {i > 0 && <span class="mx-2 text-muted-faint">&gt;</span>}
+        <span>{item}</span>
+      </>
+    ))}
+  </p>
+</nav>
