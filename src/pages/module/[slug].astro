@@ -62,24 +62,29 @@ const { Content } = await render(moduleEntry);
       </p>
     </section>
 
+    {moduleEntry.data.topics.length > 0 && (
+      <section class="mb-10">
+        <h2 class="font-mono text-h2 text-primary mb-4">Temas clave</h2>
+        <ul class="space-y-2 border-l-2 border-border pl-4">
+          {moduleEntry.data.topics.map(topic => {
+            const sep = topic.indexOf(' — ');
+            const name = sep !== -1 ? topic.slice(0, sep) : topic;
+            const hint = sep !== -1 ? topic.slice(sep + 3) : null;
+            return (
+              <li class="font-mono text-ui-label text-on-surface leading-relaxed wrap-break-words">
+                <span class="text-muted-faint mr-2">→</span>
+                {name}
+                {hint && <span class="text-muted-faint"> — {hint}</span>}
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    )}
+
     <section class="prose max-w-none mb-16">
       <Content />
     </section>
-
-    <Card variant="sunken">
-      <div class="space-y-4">
-        <div>
-          <p class="font-mono text-ui-label text-muted-strong mb-1">Temas clave</p>
-          <ul class="space-y-1">
-            {moduleEntry.data.topics.map(topic => (
-              <li class="text-body text-on-surface-variant text-sm">
-                • {topic}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </Card>
   </article>
 
   <div class="border-t border-border pt-8 flex justify-between">
