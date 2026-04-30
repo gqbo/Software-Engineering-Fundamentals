@@ -1,0 +1,24 @@
+---
+/**
+ * DifficultyBadge — Visual indicator for module difficulty level.
+ *
+ * Levels:
+ *   - "basico":     entry-level concepts
+ *   - "intermedio": mid-level concepts requiring foundations
+ *   - "avanzado":   complex topics requiring deep understanding
+ */
+type Difficulty = 'basico' | 'intermedio' | 'avanzado';
+
+interface Props {
+  level: Difficulty;
+  size?: 'sm' | 'md';
+}
+
+const { level, size = 'sm' } = Astro.props;
+
+const sizeClass = size === 'md' ? 'px-2 py-1 text-xs' : 'px-2 py-0.5 text-xs';
+const levelClass = `difficulty-${level}`;
+---
+<span class:list={['font-mono inline-block', sizeClass, levelClass]}>
+  {level}
+</span>

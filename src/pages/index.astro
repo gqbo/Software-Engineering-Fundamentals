@@ -1,24 +1,67 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Breadcrumb from '../components/Breadcrumb.astro';
 import Card from '../components/Card.astro';
+
+const categories = await getCollection('categories');
+const modules = await getCollection('modules');
+const categoriesSorted = categories.sort((a, b) => a.data.order - b.data.order);
+
+const categoryModuleCounts = new Map();
+categoriesSorted.forEach(cat => {
+  const count = modules.filter(m => m.data.category === cat.data.slug).length;
+  categoryModuleCounts.set(cat.data.slug, count);
+});
 ---
 <BaseLayout title="Software Engineering Fundamentals">
-  <Breadcrumb items={['Índice', 'Inicio']} />
+  <Breadcrumb items={['Inicio']} />
 
   <section class="mb-16">
     <h1 class="font-mono text-h1 text-primary mb-4">
       Fundamentos de Ingeniería de Software
     </h1>
-    <p class="font-mono text-h3 text-muted">
-      Estructura inicializada · contenido pendiente
+    <p class="text-body text-muted max-w-2xl mb-4">
+      Mi portafolio de aprendizaje: repasando fundamentos esenciales de ingeniería de software enfocado en backend y desarrollo con IA. Cada módulo incluye una sección "Mi explicación" donde documento mi comprensión del tema.
+    </p>
+    <p class="text-ui-label text-muted-faint">
+      {categories.length} categorías · {modules.length} módulos
     </p>
   </section>
 
-  <Card variant="sunken">
-    <p class="text-on-surface-variant text-ui-label leading-relaxed">
-      Esto es un placeholder para verificar que el shell global funciona.
-      El home real se construye en el próximo sprint.
-    </p>
-  </Card>
+  <section class="mb-16">
+    <h2 class="font-mono text-h2 text-primary mb-6">Categorías</h2>
+    <div class="grid gap-4">
+      {categoriesSorted.map(category => (
+        <a href={`/category/${category.data.slug}`} class="block">
+          <Card variant="default">
+            <div class="flex items-start gap-4">
+              <div
+                class="cat-icon-box w-12 h-12 flex items-center justify-center text-xl flex-shrink-0"
+                style={`--cat-color: ${category.data.color}`}
+              >
+                <span class="material-symbols-outlined">
+                  {category.data.icon}
+                </span>
+              </div>
+              <div class="flex-1">
+                <h3 class="font-mono text-ui-label text-primary mb-1 hover:underline">
+                  {category.data.name}
+                </h3>
+                <p class="text-body text-muted text-sm mb-2">
+                  {category.data.description}
+                </p>
+                <p class="text-ui-micro text-muted-faint">
+                  {categoryModuleCounts.get(category.data.slug)} {categoryModuleCounts.get(category.data.slug) === 1 ? 'módulo' : 'módulos'}
+                </p>
+              </div>
+              <div class="text-muted-faint flex-shrink-0">
+                <span class="material-symbols-outlined">arrow_forward</span>
+              </div>
+            </div>
+          </Card>
+        </a>
+      ))}
+    </div>
+  </section>
 </BaseLayout>

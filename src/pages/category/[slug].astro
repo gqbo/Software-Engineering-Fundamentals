@@ -1,0 +1,112 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import Card from '../../components/Card.astro';
+import DifficultyBadge from '../../components/DifficultyBadge.astro';
+
+export async function getStaticPaths() {
+  const categories = await getCollection('categories');
+  return categories.map(category => ({
+    params: { slug: category.data.slug },
+    props: { category }
+  }));
+}
+
+interface Props {
+  category: CollectionEntry<'categories'>;
+}
+
+const { slug } = Astro.params;
+const { category } = Astro.props;
+
+const allModules = await getCollection('modules');
+const modules = allModules
+  .filter(m => m.data.category === slug)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const allCategories = await getCollection('categories');
+const categoriesSorted = allCategories.sort((a, b) => a.data.order - b.data.order);
+
+const categoryIndex = categoriesSorted.findIndex(c => c.data.slug === slug);
+---
+
+<BaseLayout title={category.data.name} activeCategorySlug={category.data.slug}>
+  <Breadcrumb items={[category.data.name, 'Categoría']} />
+
+  <section class="mb-16">
+    <div class="flex items-start gap-4 mb-8">
+      <div
+        class="cat-icon-box w-12 h-12 flex items-center justify-center text-2xl flex-shrink-0"
+        style={`--cat-color: ${category.data.color}`}
+      >
+        <span class="material-symbols-outlined">
+          {category.data.icon}
+        </span>
+      </div>
+      <div>
+        <h1 class="font-mono text-h1 text-primary mb-2">
+          {category.data.name}
+        </h1>
+        <p class="text-body text-muted max-w-2xl">
+          {category.data.description}
+        </p>
+        <p class="text-ui-label text-muted-faint mt-4">
+          {modules.length} {modules.length === 1 ? 'módulo' : 'módulos'}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-16">
+    <h2 class="font-mono text-h2 text-primary mb-6">Módulos</h2>
+    <div class="space-y-3">
+      {modules.map(moduleEntry => (
+        <a href={`/module/${moduleEntry.data.slug}`} class="block">
+          <Card variant="default">
+            <div class="flex items-start gap-4">
+              <div class="flex-1">
+                <h3 class="font-mono text-ui-label text-primary mb-1 hover:underline">
+                  {moduleEntry.data.title}
+                </h3>
+                <p class="text-body text-muted text-sm mb-2">
+                  {moduleEntry.data.description}
+                </p>
+                <div class="flex gap-2 items-center text-ui-micro text-muted-faint">
+                  <DifficultyBadge level={moduleEntry.data.difficulty} />
+                </div>
+              </div>
+              <div class="text-muted-faint flex-shrink-0">
+                <span class="material-symbols-outlined">arrow_forward</span>
+              </div>
+            </div>
+          </Card>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  {categoryIndex > 0 && (
+    <div class="border-t border-border pt-8 mb-8">
+      <p class="text-ui-micro text-muted-faint mb-2">Anterior</p>
+      <a
+        href={`/category/${categoriesSorted[categoryIndex - 1].data.slug}`}
+        class="font-mono text-ui-label text-primary hover:underline"
+      >
+        ← {categoriesSorted[categoryIndex - 1].data.name}
+      </a>
+    </div>
+  )}
+
+  {categoryIndex < categoriesSorted.length - 1 && (
+    <div class="border-t border-border pt-8">
+      <p class="text-ui-micro text-muted-faint mb-2">Siguiente</p>
+      <a
+        href={`/category/${categoriesSorted[categoryIndex + 1].data.slug}`}
+        class="font-mono text-ui-label text-primary hover:underline"
+      >
+        {categoriesSorted[categoryIndex + 1].data.name} →
+      </a>
+    </div>
+  )}
+</BaseLayout>

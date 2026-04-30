@@ -12,7 +12,7 @@ const categories = (await getCollection('categories'))
   .sort((a, b) => a.order - b.order);
 ---
 <nav
-  class="hidden md:flex flex-col w-sidebar fixed left-0 top-0 h-full py-8 z-sidebar bg-bg border-r border-border"
+  class="hidden md:flex flex-col w-sidebar fixed left-0 top-topbar bottom-0 py-8 z-sidebar bg-bg border-r border-border"
   aria-label="Categories"
 >
   <div class="px-8 mb-10">
